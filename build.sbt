@@ -11,6 +11,21 @@ lazy val root = (project in file("."))
     libraryDependencies += scalaTest % Test
   )
 
+// Task that copies a file from outside the tree into the tree
+val myCopyTask = taskKey[Unit]("Copy the file")
+
+myCopyTask := {
+  val log = sLog.value
+  log.warn("Here I am.")
+  import Path._
+
+  val src = Path.userHome / "tmp/foo"
+  val dst = file("./bar")
+
+  // Copy files to source files to target
+  IO.copyFile(src, dst, CopyOptions.apply(overwrite = true, preserveLastModified = true, preserveExecutable = false))
+}
+
 // Uncomment the following for publishing to Sonatype.
 // See https://www.scala-sbt.org/1.x/docs/Using-Sonatype.html for more detail.
 
